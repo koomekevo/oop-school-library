@@ -11,6 +11,7 @@ class Person
   end
 
   attr_accessor :name, :age
+  attr_reader :id
 
   private
 
