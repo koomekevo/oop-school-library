@@ -2,8 +2,8 @@ require_relative '../person'
 
 describe Person do
   context 'When creating a person' do
-    person = Person.new(42, 'evren', parent_permission: true)
-    person2 = Person.new(4, 'alen', parent_permission: false)
+    person = Person.new(id: 1, age: 42, name: 'evren', parent_permission: true)
+    person2 = Person.new(id: 2, age: 4, name: 'alen', parent_permission: false)
 
     it 'should validate the age of the person' do
       expect(person.age).to eq 42

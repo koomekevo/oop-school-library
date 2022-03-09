@@ -4,14 +4,17 @@ require_relative './book'
 require_relative './rental'
 require_relative './student'
 require_relative './teacher'
-require 'json'
+require_relative './preserve_data'
+require 'colorize'
 
 class App
   include Prompts
+  include PreserveData
+
   def initialize()
-    @people = []
-    @books = []
-    @rentals = []
+    @people = load_people
+    @books = load_books
+    @rentals = load_rentals
   end
 
   def list_objects(input)
@@ -39,11 +42,13 @@ class App
   # 1 - List all books
   def list_books
     puts(@books.map { |b| "Title: #{b.title}, Author: #{b.author}" })
+    sleep 0.75
   end
 
   # 2 - List all people
   def list_people
     puts(@people.map { |p| "[#{p.class.name}] Name: #{p.name}, ID: #{p.id}, Age: #{p.age}" })
+    sleep 0.75
   end
 
   # 3 - Create a person
@@ -57,10 +62,12 @@ class App
     when 1
       input = one_line_prompt('Has parent permission? [Y/N]: ')
       permission = %w[Y y Yes yes].include?(input)
-      @people.push(Student.new(age, name, parent_permission: permission))
+      student = Student.new(age: age, name: name, parent_permission: permission, classroom: @classroom)
+      @people.push(student)
     when 2
       specialization = one_line_prompt('Specialization: ')
-      @people.push(Teacher.new(specialization, age, name))
+      teacher = Teacher.new(age: age, name: name, specialization: specialization)
+      @people.push(teacher)
     end
   end
 
@@ -82,25 +89,29 @@ class App
     person_index = gets.chomp.to_i
 
     date = one_line_prompt('Date: ')
-
-    @rentals.push(Rental.new(date, @people[person_index], @books[book_index]))
+    rental = Rental.new(date, @books[book_index], @people[person_index])
+    @rentals.push(rental)
   end
 
   # 6 - List rentals
   def list_rentals
     id = one_line_prompt('ID of person: ').to_i
-    person = @people.filter { |p| p.id == id }.first
-    puts 'Rentals:'
-    puts(person.rentals.map { |r| "Date: #{r.date}, Book #{r.book.title} by #{r.book.author}" })
+    @rentals.each do |rental|
+      puts "Date: #{rental.date}, Book '#{rental.book.title}' by #{rental.book.author}" if rental.person.id == id
+    end
+    sleep 0.75
   end
 
   def run
-    puts 'Welcome to School Library App'
+    puts 'Welcome to School Library App'.yellow
     loop do
       input = main_prompt
       list_objects(input) if [1, 2, 6].include?(input)
       create_object(input) if [3, 4, 5].include?(input)
       break if input == 7
     end
+    save_book
+    save_people
+    save_rental
   end
 end
