@@ -4,10 +4,10 @@ require_relative './book'
 require_relative './rental'
 require_relative './student'
 require_relative './teacher'
+require 'json'
 
 class App
   include Prompts
-
   def initialize()
     @people = []
     @books = []
