@@ -1,0 +1,24 @@
+[
+  {
+    "type": "teacher",
+    "id": 426,
+    "age": 42,
+    "name": "Evren",
+    "specialization": "Developer"
+  },
+  {
+    "type": "teacher",
+    "id": 825,
+    "age": 40,
+    "name": "Kevin",
+    "specialization": "Developer"
+  },
+  {
+    "type": "student",
+    "id": 216,
+    "age": 4,
+    "name": "Alen",
+    "permission": true,
+    "classroom": null
+  }
+]
