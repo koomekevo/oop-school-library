@@ -1,8 +1,9 @@
 require_relative './corrector'
 
 class Person
-  def initialize(age, name = 'Unknow', parent_permission: true)
-    @id = Random.rand(1..1000)
+  def initialize(id:, age:, name: 'Unknown', parent_permission: true)
+    @id = id
+    @id = Random.rand(1..1000) if @id.nil?
     @name = name
     @age = age
     @parent_permission = parent_permission
@@ -18,8 +19,8 @@ class Person
     of_age? || @parent_permission
   end
 
-  attr_accessor :name, :age
-  attr_reader :id, :rentals
+  attr_accessor :name, :age, :parent_permission, :rentals
+  attr_reader :id
 
   private
 
